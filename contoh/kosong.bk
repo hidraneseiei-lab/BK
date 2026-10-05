@@ -1,0 +1,5 @@
+10 BUKA 1, "kosong.txt", "w"
+20 TUTUP 1
+30 BUKA 1, "kosong.txt", "r"
+40 TULIS AKHIR(1)
+50 TUTUP 1

@@ -1,0 +1,7 @@
+GOSUB halo
+GOSUB halo
+TULIS "akhir"
+BERHENTI
+LABEL halo
+TULIS "hai"
+KEMBALI

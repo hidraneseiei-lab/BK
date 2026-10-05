@@ -1,0 +1,7 @@
+10 LABEL awal
+20 A = A + 1
+30 JIKA A < 3 LOMPAT awal
+40 TULIS A
+50 LOMPAT 70
+60 TULIS "salah"
+70 TULIS "ok"

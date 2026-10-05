@@ -1,0 +1,6 @@
+LABEL kuadrat
+R = A * A
+KEMBALI
+LABEL sapa
+TULIS "halo dari lib"
+KEMBALI

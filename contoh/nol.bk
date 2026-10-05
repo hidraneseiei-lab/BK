@@ -1,0 +1,4 @@
+10 UNTUK I = 5 SAMPAI 1
+20 TULIS "salah"
+30 LANJUT
+40 TULIS "benar"

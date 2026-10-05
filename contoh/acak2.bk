@@ -1,0 +1,12 @@
+# hasil ACAK harus bervariasi, bukan angka yang sama terus
+10 F = ACAK(1000000)
+20 D = 0
+30 UNTUK I = 1 SAMPAI 20
+40 JIKA ACAK(1000000) <> F GOSUB 100
+50 LANJUT
+60 JIKA D > 0 GOSUB 200
+70 BERHENTI
+100 D = D + 1
+110 KEMBALI
+200 TULIS "bervariasi"
+210 KEMBALI

@@ -1,0 +1,6 @@
+I = 3
+LABEL ulang
+TULIS I
+I = I - 1
+JIKA I > 0 LOMPAT ulang
+TULIS "selesai"

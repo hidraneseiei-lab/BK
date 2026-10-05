@@ -1,0 +1,17 @@
+# urutkan 5 angka (bubble sort)
+10 D(0) = 5
+20 D(1) = 2
+30 D(2) = 9
+40 D(3) = 1
+50 D(4) = 7
+60 UNTUK P = 1 SAMPAI 4
+70 UNTUK I = 0 SAMPAI 4 - P
+80 JIKA D(I) <= D(I + 1) LOMPAT 120
+90 T = D(I)
+100 D(I) = D(I + 1)
+110 D(I + 1) = T
+120 LANJUT
+130 LANJUT
+140 UNTUK I = 0 SAMPAI 4
+150 TULIS D(I)
+160 LANJUT

@@ -1,0 +1,6 @@
+10 N$ = "Halo dunia"
+20 TULIS PANJANG(N$)
+30 TULIS KODE("A")
+40 TULIS ANGKA("123") + 1
+50 TULIS CARI("abcdef", "cd")
+60 TULIS CARI("abc", "z")

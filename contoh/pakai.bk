@@ -1,0 +1,6 @@
+INCLUDE "contoh/lib.bk"
+A = 7
+GOSUB kuadrat
+TULIS R
+GOSUB sapa
+TULIS "selesai"

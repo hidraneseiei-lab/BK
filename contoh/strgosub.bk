@@ -1,0 +1,6 @@
+10 A$ = "x"
+20 JIKA A$ = "x" GOSUB 100
+30 TULIS "akhir"
+40 BERHENTI
+100 TULIS "masuk"
+110 KEMBALI

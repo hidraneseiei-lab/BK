@@ -1,0 +1,6 @@
+FUNGSI kuadrat(X)
+HASIL X * X
+AKHIRFUNGSI
+TULIS kuadrat(7)
+R = kuadrat(3) + kuadrat(4)
+TULIS R

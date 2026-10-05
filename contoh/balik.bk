@@ -1,0 +1,7 @@
+10 TULIS "Kata: ";
+20 BACA S$
+30 R$ = ""
+40 UNTUK I = 1 SAMPAI PANJANG(S$)
+50 R$ = TENGAH$(S$, I, 1) + R$
+60 LANJUT
+70 TULIS R$

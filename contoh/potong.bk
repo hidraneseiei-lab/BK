@@ -1,0 +1,7 @@
+10 S$ = "Selamat pagi"
+20 TULIS KIRI$(S$, 3)
+30 TULIS KANAN$(S$, 4)
+40 TULIS TENGAH$(S$, 5, 3)
+50 TULIS KAR$(72); KAR$(105)
+60 T$ = TEKS$(-45) + "!"
+70 TULIS T$

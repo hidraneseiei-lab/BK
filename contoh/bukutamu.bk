@@ -1,0 +1,12 @@
+10 TULIS "Nama kamu? ";
+20 BACA N$
+30 BUKA 1, "tamu.txt", "a"
+40 TULISFILE 1, N$
+50 TUTUP 1
+60 TULIS "Daftar tamu:"
+70 BUKA 1, "tamu.txt", "r"
+80 JIKA AKHIR(1) = 1 LOMPAT 120
+90 BACAFILE 1, L$
+100 TULIS "- "; L$
+110 LOMPAT 80
+120 TUTUP 1

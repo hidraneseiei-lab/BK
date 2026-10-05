@@ -1,0 +1,8 @@
+10 A = 2 + 3 * 4
+20 TULIS A
+30 B = 100 / 7 - 4
+40 TULIS B
+50 C = 0 - 5
+60 TULIS C
+70 TULIS -A
+80 BERHENTI

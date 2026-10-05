@@ -1,0 +1,5 @@
+LOMPAT 20
+10 TULIS "salah"
+20 INCLUDE "contoh/lib2.bk"
+30 GOSUB 1000
+40 TULIS "ok"

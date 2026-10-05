@@ -1,0 +1,8 @@
+10 A = 3
+20 JIKA A >= 3 LOMPAT 40
+30 TULIS "salah"
+40 JIKA A <> 3 LOMPAT 70
+50 JIKA A = 3 LOMPAT 80
+60 TULIS "salah2"
+70 TULIS "salah3"
+80 TULIS "benar"

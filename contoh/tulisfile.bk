@@ -1,0 +1,12 @@
+10 BUKA 1, "uji.txt", "w"
+20 TULISFILE 1, "baris satu"
+30 TULISFILE 1, "angka "; 6 * 7
+40 TULISFILE 1, "tanpa";
+50 TULISFILE 1, "-nl"
+60 TUTUP 1
+70 BUKA 2, "uji.txt", "r"
+80 JIKA AKHIR(2) = 1 LOMPAT 130
+90 BACAFILE 2, L$
+100 TULIS "["; L$; "]"
+110 LOMPAT 80
+130 TUTUP 2

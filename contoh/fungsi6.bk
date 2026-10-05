@@ -1,0 +1,6 @@
+FUNGSI sapa(N)
+TULIS "halo "; N
+AKHIRFUNGSI
+PANGGIL sapa(3)
+PANGGIL sapa(4)
+TULIS "selesai"

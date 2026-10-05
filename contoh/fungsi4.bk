@@ -1,0 +1,7 @@
+X = 100
+FUNGSI ubah(X)
+X = X + 1
+HASIL X
+AKHIRFUNGSI
+TULIS ubah(5)
+TULIS X

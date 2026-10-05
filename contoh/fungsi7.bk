@@ -1,0 +1,12 @@
+# I adalah parameter jadi lokal: loop luar tidak terganggu
+FUNGSI isqrt(N, I)
+UNTUK I = 1 SAMPAI 10
+JIKA I * I >= N LOMPAT ketemu
+LANJUT
+HASIL 0
+LABEL ketemu
+HASIL I
+AKHIRFUNGSI
+UNTUK I = 1 SAMPAI 3
+TULIS isqrt(I * 10)
+LANJUT

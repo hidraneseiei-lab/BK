@@ -1,0 +1,8 @@
+FUNGSI fakt(N)
+JIKA N <= 1 LOMPAT dasar
+HASIL N * fakt(N - 1)
+LABEL dasar
+HASIL 1
+AKHIRFUNGSI
+TULIS fakt(5)
+TULIS fakt(10)

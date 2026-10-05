@@ -1,0 +1,7 @@
+# 5! = 120
+10 N = 5
+20 F = 1
+30 F = F * N
+40 N = N - 1
+50 JIKA N > 0 LOMPAT 30
+60 TULIS F

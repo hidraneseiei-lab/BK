@@ -1,0 +1,11 @@
+A = 5
+JIKA A > 3 GOSUB besar
+JIKA A < 3 GOSUB kecil
+TULIS "akhir"
+BERHENTI
+LABEL besar
+TULIS "besar"
+KEMBALI
+LABEL kecil
+TULIS "kecil"
+KEMBALI

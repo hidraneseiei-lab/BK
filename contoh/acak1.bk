@@ -1,0 +1,11 @@
+# ACAK(6) harus selalu 0..5, hitung berapa yang di luar rentang
+10 B = 0
+20 UNTUK I = 1 SAMPAI 200
+30 R = ACAK(6)
+40 JIKA R < 0 GOSUB 100
+50 JIKA R > 5 GOSUB 100
+60 LANJUT
+70 TULIS B
+80 BERHENTI
+100 B = B + 1
+110 KEMBALI

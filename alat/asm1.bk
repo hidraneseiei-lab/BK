@@ -1,0 +1,458 @@
+# asm1.bk - assembler mini ARM64 (tahap 1), ditulis dalam BK (butuh bk v19)
+# pakai : echo berkas.s | bk asm1.bk > berkas.hex
+#         hex0 < berkas.hex > berkas
+# subset: sub add mov cmp cbz ldrb strb lsl orr b b.kondisi svc, label, .global .text
+# kesalahan dicetak sebagai baris yang diawali "!!"
+
+FUNGSI hx$(N)
+HASILTEKS TENGAH$("0123456789ABCDEF", N / 16 + 1, 1) + TENGAH$("0123456789ABCDEF", N % 16 + 1, 1)
+AKHIRFUNGSI
+
+FUNGSI le$(V, K, I, R$)
+R$ = ""
+UNTUK I = 1 SAMPAI K
+R$ = R$ + hx$(V % 256) + " "
+V = V / 256
+LANJUT
+HASILTEKS R$
+AKHIRFUNGSI
+
+FUNGSI rapi$(S$, B)
+B = 1
+SELAMA B = 1
+B = 0
+KALAU PANJANG(S$) > 0
+KALAU KODE(KIRI$(S$, 1)) <= 32
+S$ = KANAN$(S$, PANJANG(S$) - 1)
+B = 1
+AKHIRKALAU
+AKHIRKALAU
+AKHIRSELAMA
+B = 1
+SELAMA B = 1
+B = 0
+KALAU PANJANG(S$) > 0
+KALAU KODE(KANAN$(S$, 1)) <= 32
+S$ = KIRI$(S$, PANJANG(S$) - 1)
+B = 1
+AKHIRKALAU
+AKHIRKALAU
+AKHIRSELAMA
+HASILTEKS S$
+AKHIRFUNGSI
+
+FUNGSI bersih$(S$, P)
+P = CARI(S$, "//")
+KALAU P > 0
+S$ = KIRI$(S$, P - 1)
+AKHIRKALAU
+HASILTEKS rapi$(S$)
+AKHIRFUNGSI
+
+FUNGSI gagal(N)
+TULIS "!! baris "; N; ": "; pesan$
+BERHENTI
+AKHIRFUNGSI
+
+FUNGSI rno(R$, N)
+KALAU R$ = "sp"
+HASIL 31
+AKHIRKALAU
+KALAU R$ = "xzr"
+HASIL 31
+AKHIRKALAU
+KALAU R$ = "wzr"
+HASIL 31
+AKHIRKALAU
+KALAU KIRI$(R$, 1) = "x"
+N = ANGKA(KANAN$(R$, PANJANG(R$) - 1))
+LAIN
+KALAU KIRI$(R$, 1) = "w"
+N = ANGKA(KANAN$(R$, PANJANG(R$) - 1))
+LAIN
+N = 99
+AKHIRKALAU
+AKHIRKALAU
+KALAU N > 30
+pesan$ = "register tidak dikenal: " + R$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU N < 0
+pesan$ = "register tidak dikenal: " + R$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+HASIL N
+AKHIRFUNGSI
+
+FUNGSI rlb(R$)
+KALAU R$ = "sp"
+HASIL 1
+AKHIRKALAU
+KALAU R$ = "xzr"
+HASIL 1
+AKHIRKALAU
+KALAU KIRI$(R$, 1) = "x"
+HASIL 1
+AKHIRKALAU
+HASIL 0
+AKHIRFUNGSI
+
+FUNGSI imm(S$)
+KALAU KIRI$(S$, 1) <> "#"
+pesan$ = "diharapkan #angka: " + S$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+HASIL ANGKA(KANAN$(S$, PANJANG(S$) - 1))
+AKHIRFUNGSI
+
+FUNGSI pecah(S$, I, D, C$)
+op.n = 0
+op.t$(1) = ""
+op.t$(2) = ""
+op.t$(3) = ""
+op.t$(4) = ""
+tok$ = ""
+D = 0
+UNTUK I = 1 SAMPAI PANJANG(S$)
+C$ = TENGAH$(S$, I, 1)
+KALAU C$ = "["
+D = D + 1
+AKHIRKALAU
+KALAU C$ = "]"
+D = D - 1
+AKHIRKALAU
+KALAU C$ = ","
+KALAU D = 0
+op.n = op.n + 1
+KALAU op.n > 4
+pesan$ = "operand terlalu banyak"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+op.t$(op.n) = rapi$(tok$)
+tok$ = ""
+LAIN
+tok$ = tok$ + C$
+AKHIRKALAU
+LAIN
+tok$ = tok$ + C$
+AKHIRKALAU
+LANJUT
+KALAU PANJANG(tok$) > 0
+op.n = op.n + 1
+op.t$(op.n) = rapi$(tok$)
+AKHIRKALAU
+AKHIRFUNGSI
+
+FUNGSI selisih(N$, Q, I, T)
+T = 0 - 1
+UNTUK I = 1 SAMPAI lab.jumlah
+KALAU lab.n$(I) = N$
+T = lab.a(I)
+AKHIRKALAU
+LANJUT
+KALAU T < 0
+pesan$ = "label tidak ada: " + N$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+HASIL (T - Q) / 4
+AKHIRFUNGSI
+
+FUNGSI enmov(R, S, A, M)
+R = rno(op.t$(1))
+S = rlb(op.t$(1))
+KALAU KIRI$(op.t$(2), 1) = "#"
+A = imm(op.t$(2))
+KALAU A >= 0
+KALAU A > 65535
+pesan$ = "imm mov di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU S = 1
+HASIL 3531603968 + A * 32 + R
+AKHIRKALAU
+HASIL 1384120320 + A * 32 + R
+AKHIRKALAU
+A = 0 - A - 1
+KALAU A > 65535
+pesan$ = "imm mov di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU S = 1
+HASIL 2457862144 + A * 32 + R
+AKHIRKALAU
+HASIL 310378496 + A * 32 + R
+AKHIRKALAU
+M = rno(op.t$(2))
+A = 0
+KALAU op.t$(1) = "sp"
+A = 1
+AKHIRKALAU
+KALAU op.t$(2) = "sp"
+A = 1
+AKHIRKALAU
+KALAU A = 1
+HASIL 2432696320 + M * 32 + R
+AKHIRKALAU
+KALAU S = 1
+HASIL 2852127712 + M * 65536 + R
+AKHIRKALAU
+HASIL 704644064 + M * 65536 + R
+AKHIRFUNGSI
+
+FUNGSI enadd(M$, R, N, A)
+R = rno(op.t$(1))
+N = rno(op.t$(2))
+A = imm(op.t$(3))
+KALAU A < 0
+pesan$ = "imm di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU A > 4095
+pesan$ = "imm di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU rlb(op.t$(1)) = 1
+KALAU M$ = "sub"
+HASIL 3506438144 + A * 1024 + N * 32 + R
+AKHIRKALAU
+HASIL 2432696320 + A * 1024 + N * 32 + R
+AKHIRKALAU
+KALAU M$ = "sub"
+HASIL 1358954496 + A * 1024 + N * 32 + R
+AKHIRKALAU
+HASIL 285212672 + A * 1024 + N * 32 + R
+AKHIRFUNGSI
+
+FUNGSI encmp(N, A)
+N = rno(op.t$(1))
+A = imm(op.t$(2))
+KALAU A < 0
+pesan$ = "imm di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU A > 4095
+pesan$ = "imm di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU rlb(op.t$(1)) = 1
+HASIL 4043309087 + A * 1024 + N * 32
+AKHIRKALAU
+HASIL 1895825439 + A * 1024 + N * 32
+AKHIRFUNGSI
+
+FUNGSI encbz(Q, R, O)
+R = rno(op.t$(1))
+O = selisih(op.t$(2), Q)
+KALAU O < 0
+O = O + 524288
+AKHIRKALAU
+KALAU rlb(op.t$(1)) = 1
+HASIL 3019898880 + O * 32 + R
+AKHIRKALAU
+HASIL 872415232 + O * 32 + R
+AKHIRFUNGSI
+
+FUNGSI enldst(M$, R, N, A)
+R = rno(op.t$(1))
+alamat$ = op.t$(2)
+KALAU KIRI$(alamat$, 1) <> "["
+pesan$ = "alamat harus [reg] atau [reg, #n]"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+alamat$ = TENGAH$(alamat$, 2, PANJANG(alamat$) - 2)
+A = CARI(alamat$, ",")
+KALAU A = 0
+N = rno(rapi$(alamat$))
+A = 0
+LAIN
+N = rno(rapi$(KIRI$(alamat$, A - 1)))
+A = imm(rapi$(KANAN$(alamat$, PANJANG(alamat$) - A)))
+AKHIRKALAU
+KALAU A < 0
+pesan$ = "offset di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU A > 4095
+pesan$ = "offset di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU M$ = "ldrb"
+HASIL 960495616 + A * 1024 + N * 32 + R
+AKHIRKALAU
+HASIL 956301312 + A * 1024 + N * 32 + R
+AKHIRFUNGSI
+
+FUNGSI enlsl(R, N, S, Z)
+R = rno(op.t$(1))
+N = rno(op.t$(2))
+S = imm(op.t$(3))
+Z = 32
+KALAU rlb(op.t$(1)) = 1
+Z = 64
+AKHIRKALAU
+KALAU S < 0
+pesan$ = "geser di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU S >= Z
+pesan$ = "geser di luar jangkauan"
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU Z = 64
+HASIL 3544186880 + ((64 - S) % 64) * 65536 + (63 - S) * 1024 + N * 32 + R
+AKHIRKALAU
+HASIL 1392508928 + ((32 - S) % 32) * 65536 + (31 - S) * 1024 + N * 32 + R
+AKHIRFUNGSI
+
+FUNGSI enorr(R, N, M)
+R = rno(op.t$(1))
+N = rno(op.t$(2))
+M = rno(op.t$(3))
+KALAU rlb(op.t$(1)) = 1
+HASIL 2852126720 + M * 65536 + N * 32 + R
+AKHIRKALAU
+HASIL 704643072 + M * 65536 + N * 32 + R
+AKHIRFUNGSI
+
+FUNGSI enb(Q, O)
+O = selisih(op.t$(1), Q)
+KALAU O < 0
+O = O + 67108864
+AKHIRKALAU
+HASIL 335544320 + O
+AKHIRFUNGSI
+
+FUNGSI enbc(M$, Q, O, P)
+P = CARI("eq ne cs cc mi pl vs vc hi ls ge lt gt le ", KANAN$(M$, 2))
+KALAU P = 0
+pesan$ = "kondisi tidak dikenal: " + M$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+KALAU P % 3 <> 1
+pesan$ = "kondisi tidak dikenal: " + M$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+O = selisih(op.t$(1), Q)
+KALAU O < 0
+O = O + 524288
+AKHIRKALAU
+HASIL 1409286144 + O * 32 + (P - 1) / 3
+AKHIRFUNGSI
+
+FUNGSI enc(M$, Q)
+KALAU M$ = "svc"
+HASIL 3556769793 + imm(op.t$(1)) * 32
+AKHIRKALAU
+KALAU M$ = "mov"
+HASIL enmov()
+AKHIRKALAU
+KALAU M$ = "sub"
+HASIL enadd(M$)
+AKHIRKALAU
+KALAU M$ = "add"
+HASIL enadd(M$)
+AKHIRKALAU
+KALAU M$ = "cmp"
+HASIL encmp()
+AKHIRKALAU
+KALAU M$ = "cbz"
+HASIL encbz(Q)
+AKHIRKALAU
+KALAU M$ = "ldrb"
+HASIL enldst(M$)
+AKHIRKALAU
+KALAU M$ = "strb"
+HASIL enldst(M$)
+AKHIRKALAU
+KALAU M$ = "lsl"
+HASIL enlsl()
+AKHIRKALAU
+KALAU M$ = "orr"
+HASIL enorr()
+AKHIRKALAU
+KALAU M$ = "b"
+HASIL enb(Q)
+AKHIRKALAU
+KALAU KIRI$(M$, 2) = "b."
+HASIL enbc(M$, Q)
+AKHIRKALAU
+pesan$ = "instruksi belum didukung: " + M$
+PANGGIL gagal(nobaris)
+AKHIRFUNGSI
+
+# ---------- lintasan 1: baca, kumpulkan label dan instruksi ----------
+BACA berkas$
+F$ = berkas$
+BUKA 1, F$, "r"
+nobaris = 0
+jumlah = 0
+lab.jumlah = 0
+SELAMA AKHIR(1) = 0
+BACAFILE 1, L$
+nobaris = nobaris + 1
+t$ = bersih$(L$)
+KALAU PANJANG(t$) > 0
+KALAU KANAN$(t$, 1) = ":"
+lab.jumlah = lab.jumlah + 1
+lab.n$(lab.jumlah) = KIRI$(t$, PANJANG(t$) - 1)
+lab.a(lab.jumlah) = jumlah * 4
+LAIN
+KALAU KIRI$(t$, 1) = "."
+KALAU KIRI$(t$, 7) <> ".global"
+KALAU t$ <> ".text"
+pesan$ = "direktif belum didukung (tahap 1): " + t$
+PANGGIL gagal(nobaris)
+AKHIRKALAU
+AKHIRKALAU
+LAIN
+kode.t$(jumlah) = t$
+kode.n(jumlah) = nobaris
+jumlah = jumlah + 1
+AKHIRKALAU
+AKHIRKALAU
+AKHIRKALAU
+AKHIRSELAMA
+TUTUP 1
+
+mulai = 0 - 1
+UNTUK K = 1 SAMPAI lab.jumlah
+KALAU lab.n$(K) = "_start"
+mulai = lab.a(K)
+AKHIRKALAU
+LANJUT
+KALAU mulai < 0
+pesan$ = "label _start tidak ada"
+PANGGIL gagal(0)
+AKHIRKALAU
+ukuran = jumlah * 4
+
+# ---------- tajuk ELF ----------
+TULIS "# tajuk ELF dibuat oleh asm1.bk"
+TULIS "7F 45 4C 46 02 01 01 00 00 00 00 00 00 00 00 00"
+TULIS "02 00 B7 00 01 00 00 00 "; le$(2097328 + mulai, 8)
+TULIS le$(64, 8); le$(0, 8)
+TULIS "00 00 00 00 40 00 38 00 02 00 40 00 00 00 00 00"
+TULIS "01 00 00 00 07 00 00 00 "; le$(176, 8)
+TULIS le$(2097328, 8); le$(2097328, 8)
+TULIS le$(ukuran, 8); le$(ukuran, 8); le$(4, 8)
+TULIS "51 E5 74 64 06 00 00 00 "; le$(0, 8)
+TULIS le$(0, 8); le$(0, 8)
+TULIS le$(0, 8); le$(0, 8); le$(0, 8)
+TULIS "# kode"
+
+# ---------- lintasan 2: sandikan ----------
+UNTUK K = 0 SAMPAI jumlah - 1
+ins$ = kode.t$(K)
+nobaris = kode.n(K)
+pos = CARI(ins$, " ")
+KALAU pos = 0
+mn$ = ins$
+rest$ = ""
+LAIN
+mn$ = KIRI$(ins$, pos - 1)
+rest$ = rapi$(KANAN$(ins$, PANJANG(ins$) - pos))
+AKHIRKALAU
+PANGGIL pecah(rest$)
+kata = enc(mn$, K * 4)
+TULIS le$(kata, 4); " # "; ins$
+LANJUT

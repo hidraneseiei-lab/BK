@@ -1,0 +1,12 @@
+10 BUKA 1, "uji2.txt", "w"
+20 TULISFILE 1, "a"
+30 TUTUP 1
+40 BUKA 1, "uji2.txt", "a"
+50 TULISFILE 1, "b"
+60 TUTUP 1
+70 BUKA 1, "uji2.txt", "r"
+80 UNTUK I = 1 SAMPAI 2
+90 BACAFILE 1, X$
+100 TULIS X$
+110 LANJUT
+120 TUTUP 1

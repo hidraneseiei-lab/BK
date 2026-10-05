@@ -1,0 +1,5 @@
+10 TULIS "Masukkan angka:"
+20 BACA A
+30 B = A * A
+40 TULIS "Kuadratnya:";
+50 TULIS B

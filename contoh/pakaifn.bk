@@ -1,0 +1,2 @@
+INCLUDE "contoh/matfn.bk"
+TULIS kubik(3)

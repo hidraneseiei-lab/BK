@@ -1,0 +1,7 @@
+10 A$ = "abc"
+20 B$ = "ab"
+30 B$ = B$ + "c"
+40 JIKA A$ <> B$ LOMPAT 70
+50 TULIS "sama"
+60 BERHENTI
+70 TULIS "beda"

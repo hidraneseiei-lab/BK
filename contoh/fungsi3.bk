@@ -1,0 +1,7 @@
+FUNGSI fib(N)
+JIKA N < 2 LOMPAT dasar
+HASIL fib(N - 1) + fib(N - 2)
+LABEL dasar
+HASIL N
+AKHIRFUNGSI
+TULIS fib(10)

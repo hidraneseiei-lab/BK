@@ -1,0 +1,17 @@
+# fungsi: 1 kalau N prima, 0 kalau bukan
+FUNGSI prima(N, D)
+JIKA N < 2 LOMPAT bukan
+UNTUK D = 2 SAMPAI N - 1
+JIKA N % D = 0 LOMPAT bukan
+LANJUT
+HASIL 1
+LABEL bukan
+HASIL 0
+AKHIRFUNGSI
+UNTUK K = 1 SAMPAI 30
+JIKA prima(K) = 1 GOSUB cetak
+LANJUT
+BERHENTI
+LABEL cetak
+TULIS K
+KEMBALI

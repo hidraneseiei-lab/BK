@@ -1,0 +1,6 @@
+10 TULIS "Nama kamu? ";
+20 BACA N$
+30 JIKA N$ = "Budi" LOMPAT 60
+40 TULIS "Halo, "; N$
+50 BERHENTI
+60 TULIS "Halo bos!"

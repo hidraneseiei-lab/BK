@@ -1,0 +1,10 @@
+I = 1
+SELAMA I <= 3
+J = 1
+SELAMA J <= I
+TULIS "*";
+J = J + 1
+AKHIRSELAMA
+TULIS ""
+I = I + 1
+AKHIRSELAMA

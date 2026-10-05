@@ -1,0 +1,4 @@
+A = 5
+JIKA A > 3 MAKA TULIS "besar"
+JIKA A > 9 MAKA TULIS "sangat besar"
+TULIS "akhir"

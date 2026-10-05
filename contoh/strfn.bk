@@ -1,0 +1,9 @@
+10 N$ = "Budi Santoso"
+20 JIKA KIRI$(N$, 4) = "Budi" LOMPAT 50
+30 TULIS "salah"
+40 BERHENTI
+50 TULIS "cocok"
+60 JIKA PANJANG(N$) > 5 GOSUB 100
+70 BERHENTI
+100 TULIS "panjang"
+110 KEMBALI

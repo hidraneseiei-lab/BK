@@ -1,0 +1,6 @@
+FUNGSI tambah(A, B, C)
+HASIL A + B + C
+AKHIRFUNGSI
+TULIS tambah(3, 4)
+TULIS tambah(tambah(1, 2), tambah(3, 4), 5)
+TULIS tambah()

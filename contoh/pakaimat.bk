@@ -1,0 +1,5 @@
+INCLUDE "contoh/matematika.bk"
+UNTUK A = 1 SAMPAI 5
+GOSUB kubik
+TULIS A; " pangkat 3 = "; R
+LANJUT

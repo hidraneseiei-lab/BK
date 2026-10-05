@@ -1,0 +1,5 @@
+10 TULIS KIRI$("abc", 10)
+20 TULIS KANAN$("abc", 10)
+30 TULIS TENGAH$("abc", 2, 10)
+40 TULIS "["; KIRI$("abc", 0); "]"
+50 TULIS TENGAH$("abc", 9, 1)

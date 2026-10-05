@@ -1,0 +1,6 @@
+10 N$ = "Budi"
+20 TULIS "Halo, "; N$
+30 S$ = N$ + " dan " + "Ani"
+40 TULIS S$
+50 TULIS "x=";
+60 TULIS 5 * 2
